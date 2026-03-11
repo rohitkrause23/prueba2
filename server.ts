@@ -9,6 +9,11 @@ const __dirname = path.dirname(__filename);
 
 const supabaseUrl = process.env.SUPABASE_URL || "";
 const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || "";
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error("CRITICAL ERROR: Supabase environment variables are missing!");
+}
+
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export const app = express();
@@ -28,20 +33,40 @@ async function createServer() {
     next();
   });
 
+  // API routes go here
+  app.get("/api/health", (req, res) => {
+    res.json({ 
+      status: "ok",
+      supabaseConfigured: !!process.env.SUPABASE_URL && !!process.env.SUPABASE_ANON_KEY,
+      env: process.env.NODE_ENV
+    });
+  });
+
   // Auth API
   app.post("/api/login", async (req, res) => {
     const { username, password } = req.body;
-    const { data: user, error } = await supabase
-      .from("users")
-      .select("*, branches(name)")
-      .eq("username", username)
-      .eq("password", password)
-      .single();
+    
+    try {
+      const { data: user, error } = await supabase
+        .from("users")
+        .select("*, branches(name)")
+        .eq("username", username)
+        .eq("password", password)
+        .single();
 
-    if (user && !error) {
-      res.json({ ...user, branch_name: (user as any).branches?.name });
-    } else {
-      res.status(401).json({ error: "Credenciales inválidas" });
+      if (error) {
+        console.error("Login error from Supabase:", error);
+        return res.status(401).json({ error: "Credenciales inválidas" });
+      }
+
+      if (user) {
+        res.json({ ...user, branch_name: (user as any).branches?.name });
+      } else {
+        res.status(401).json({ error: "Credenciales inválidas" });
+      }
+    } catch (err) {
+      console.error("Unexpected login error:", err);
+      res.status(500).json({ error: "Error interno del servidor" });
     }
   });
 
