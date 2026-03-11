@@ -120,11 +120,11 @@ export default function Orders({ user }: { user: User }) {
                   </span>
                 </td>
                 <td className="px-6 py-4 font-bold text-gray-900">
-                  Gs. {order.total.toLocaleString()}
+                  Gs. {(order.total ?? 0).toLocaleString()}
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`font-bold ${order.total - order.paid > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
-                    Gs. {(order.total - order.paid).toLocaleString()}
+                  <span className={`font-bold ${(order.total ?? 0) - (order.paid ?? 0) > 0 ? 'text-red-500' : 'text-emerald-500'}`}>
+                    Gs. {((order.total ?? 0) - (order.paid ?? 0)).toLocaleString()}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">

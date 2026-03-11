@@ -41,9 +41,9 @@ export default function Dashboard({ user }: { user: User }) {
   if (loading) return <div className="flex items-center justify-center h-64">Cargando estadísticas...</div>;
 
   const cards = [
-    { label: 'Ventas del Día', value: `Gs. ${stats?.salesToday.toLocaleString()}`, icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-50', trend: '+12%', trendUp: true },
-    { label: 'Cobros del Día', value: `Gs. ${stats?.paymentsToday.toLocaleString()}`, icon: ArrowUpRight, color: 'text-blue-500', bg: 'bg-blue-50', trend: '+5%', trendUp: true },
-    { label: 'Gastos del Día', value: `Gs. ${stats?.expensesToday.toLocaleString()}`, icon: TrendingDown, color: 'text-red-500', bg: 'bg-red-50', trend: '-2%', trendUp: false },
+    { label: 'Ventas del Día', value: `Gs. ${(stats?.salesToday ?? 0).toLocaleString()}`, icon: TrendingUp, color: 'text-emerald-500', bg: 'bg-emerald-50', trend: '+12%', trendUp: true },
+    { label: 'Cobros del Día', value: `Gs. ${(stats?.paymentsToday ?? 0).toLocaleString()}`, icon: ArrowUpRight, color: 'text-blue-500', bg: 'bg-blue-50', trend: '+5%', trendUp: true },
+    { label: 'Gastos del Día', value: `Gs. ${(stats?.expensesToday ?? 0).toLocaleString()}`, icon: TrendingDown, color: 'text-red-500', bg: 'bg-red-50', trend: '-2%', trendUp: false },
     { label: 'Pedidos Pendientes', value: stats?.pendingOrders, icon: Clock, color: 'text-amber-500', bg: 'bg-amber-50' },
     { label: 'En Producción', value: stats?.productionOrders, icon: Package, color: 'text-purple-500', bg: 'bg-purple-50' },
   ];

@@ -82,7 +82,7 @@ export default function Expenses({ user }: { user: User }) {
                       {expense.branch_name}
                     </td>
                     <td className="px-6 py-4 font-bold text-red-500">
-                      Gs. {expense.amount.toLocaleString()}
+                      Gs. {(expense.amount ?? 0).toLocaleString()}
                     </td>
                   </tr>
                 ))}
